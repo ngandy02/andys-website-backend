@@ -1,0 +1,10 @@
+Pytest fixutre notes: 
+    1) Test function starts
+    2) Fixture runs:
+    - Registers temp account → gets email
+    - Yields email to test
+    3) Test runs with the email
+    4) Test finishes
+    5) Fixture continues:
+    - Tries to delete account
+    - If already deleted, prints message
