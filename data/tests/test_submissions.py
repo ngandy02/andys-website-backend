@@ -3,9 +3,11 @@ import pytest
 
 TEST_EMAIL = "an3299@nyu.edu"
 TEST_NAME = "Andy Ng"
+TEST_FEEDBACK = "Really nice work with the UI!"
 
 TEMP_EMAIL = "allnng222@yahoo.com"
 TEMP_NAME = "Allen Ng"
+TEMP_FEEDBACK = "I like your page's transitions and theme"
 
 INVALID_EMAIL = "hello"
 NONEXISTENT_EMAIL = "ngandy0202@gmail.com"
@@ -20,9 +22,13 @@ def test_is_valid_name():
     assert result is True
 
 
-def test_email_already_exists():
-    with pytest.raises(ValueError):
-        sub.register("Andrew Chen", TEST_EMAIL)
+def test_is_valid_feedback():
+    result = sub.is_valid_feedback(TEST_FEEDBACK)
+    assert result is True
+
+# def test_email_already_exists():
+#     with pytest.raises(ValueError):
+#         sub.submit("Andrew Chen", TEST_EMAIL)
     
 
 def test_invalid_email():
@@ -37,7 +43,7 @@ def test_delete_nonexistent_submission():
 
 @pytest.fixture(scope="function")
 def temp_submission():
-    email = sub.register(TEMP_NAME, TEMP_EMAIL)
+    email = sub.submit(TEMP_NAME, TEMP_EMAIL, TEMP_FEEDBACK)
     yield email
     try:
         sub.delete_submission(email)
@@ -46,14 +52,11 @@ def temp_submission():
 
 
 # create test
-def test_register(temp_submission):
-    # result = sub.register(TEST_NAME, TEST_EMAIL)
-    assert TEMP_EMAIL == temp_submission
-    assert sub.submission_exists(TEMP_EMAIL)
-    assert sub.submission_exists(temp_submission)
-    submission = sub.get_submission(temp_submission)
-    assert TEMP_EMAIL == submission[sub.EMAIL]
-    assert TEMP_NAME == submission[sub.NAME]
+def test_submit():
+    result = sub.submit(TEST_NAME, TEST_EMAIL, TEST_FEEDBACK)
+    assert result == TEST_EMAIL
+    assert result in sub.read_submissions()
+    
 
 
 # read all test
@@ -64,11 +67,13 @@ def test_read_submissions(temp_submission):
         return
     print(result)
     for key, value in result.items():
-        assert sub.EMAIL and sub.NAME in value
+        assert sub.EMAIL and sub.NAME and sub.FEEDBACK in value
         assert isinstance(key, str)
     assert temp_submission in result
     assert TEST_EMAIL in result
     assert TEST_NAME in result[TEST_EMAIL][sub.NAME]
+    assert TEST_EMAIL in result[TEST_EMAIL][sub.EMAIL]
+    assert TEST_FEEDBACK in result[TEST_EMAIL][sub.FEEDBACK]
     assert "Allen Ng" in result["allnng222@yahoo.com"][sub.NAME]
 
 
@@ -78,6 +83,7 @@ def test_read_one_submission(temp_submission):
     print(submission)
     assert submission[sub.EMAIL] == temp_submission
     assert submission[sub.NAME] == TEMP_NAME
+    assert submission[sub.FEEDBACK] == TEMP_FEEDBACK
     for key, value in submission.items():
         assert isinstance(key, str)
         assert isinstance(value, str)
@@ -87,7 +93,7 @@ def test_read_one_submission(temp_submission):
 
 # delete test 
 def test_delete(temp_submission):
-    temp_dict = {sub.NAME: TEMP_NAME, sub.EMAIL: TEMP_EMAIL} 
+    temp_dict = {sub.NAME: TEMP_NAME, sub.EMAIL: TEMP_EMAIL, sub.FEEDBACK: TEMP_FEEDBACK} 
     assert sub.get_submission(temp_submission) == temp_dict
     result = sub.delete_submission(temp_submission)
     assert sub.get_submission(temp_submission) == None

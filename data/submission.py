@@ -4,6 +4,7 @@ from pathlib import Path
 
 NAME = "name"
 EMAIL = "email"
+FEEDBACK = "feedback"
 SUBMISSIONS_COLLECTION = "submissions"
 EMAIL_FORMAT = (
             r'^[A-Za-z0-9]+'            # Start with alnum characters
@@ -91,23 +92,35 @@ def is_valid_name(name: str) -> bool:
     return True
     
 
-def register(name: str, email: str) -> str:
+def is_valid_feedback(feedback: str) -> bool:
+    """
+    Check if feedback is valid
+    """
+    if not isinstance(feedback, str):
+        raise ValueError("Feedback is not a string")
+    return True
+
+
+def submit(name: str, email: str, feedback: str) -> str:
     """
     Create.
-    Register a new submission. Stores in local JSON file. Returns email on success.
-    Raises ValueError for invalid input or if email already registered.
+    Submit a new submission. Stores in local JSON file. Returns email on success.
+    Raises ValueError for invalid input.
     """
     if not is_valid_name(name):
         raise ValueError(f"Name is not a valid name {name}")
 
     if not is_valid_email(email):
         raise ValueError(f"Email does not follow correct format {email}")
+    
+    if not is_valid_feedback(feedback):
+        raise ValueError("Feeback is not a string")
 
     submissions = read_submissions()
-    if submission_exists(email):
-        raise ValueError(f"Email already registered: {email}")
+    # if submission_exists(email):
+    #     raise ValueError(f"Email already registered: {email}")
 
-    submissions[email] = {NAME: name, EMAIL: email}
+    submissions[email] = {NAME: name, EMAIL: email, FEEDBACK: feedback}
     save_submissions(submissions)
     return email 
     
