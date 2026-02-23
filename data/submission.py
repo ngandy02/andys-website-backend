@@ -4,7 +4,7 @@ from pathlib import Path
 
 NAME = "name"
 EMAIL = "email"
-ACCOUNTS_COLLECTION = "accounts"
+SUBMISSIONS_COLLECTION = "submissions"
 EMAIL_FORMAT = (
             r'^[A-Za-z0-9]+'            # Start with alnum characters
             r'([_.+-][a-zA-Z0-9]+)*'    # Allow ., +, - followed by alnum char
@@ -14,13 +14,13 @@ EMAIL_FORMAT = (
         )
 
 # Local storage: JSON file next to this module (email -> {name, email})
-STORAGE_PATH = Path(__file__).resolve().parent / "accounts.json"
+STORAGE_PATH = Path(__file__).resolve().parent / "submissions.json"
 
 
-def read_accounts() -> dict:
+def read_submissions() -> dict:
     """
     Read.
-    Load accounts from disk. Returns dict mapping email -> {name, email}.
+    Load submissions from disk. Returns dict mapping email -> {name, email}.
     """
     if not STORAGE_PATH.exists():
         return {}
@@ -28,42 +28,46 @@ def read_accounts() -> dict:
         return json.load(f)
 
 
-def delete_account(email: str):
+def delete_submission(email: str) -> dict:
     """
-    Delete an account given an email.
+    Delete an submission given an email.
+    Returns the value that was associated with the email key 
+    which is the specific deleted submission dict
     """
-    accounts = read_accounts()
-    deleted_acc = accounts.pop(email)
-    save_accounts(accounts)
+    submissions = read_submissions()
+    deleted_acc = submissions.pop(email)
+    save_submissions(submissions)
     return deleted_acc
 
 
-def save_accounts(accounts: dict) -> None:
+def save_submissions(submissions: dict) -> None:
     """
-    Uploads new account to the database or storage 
+    Uploads new submission to the database or storage 
     """
     with open(STORAGE_PATH, "w", encoding="utf-8") as f:
-        json.dump(accounts, f, indent=2)
+        json.dump(submissions, f, indent=2)
 
 
-def account_exists(email: str) -> bool:
+def submission_exists(email: str) -> bool:
     """
-    Checks if an account with the email already exists
+    Checks if an submission with the email already exists
     """
-    accounts = read_accounts()
-    if email in accounts:
+    submissions = read_submissions()
+    if email in submissions:
             return True
     return False
 
 
-def get_account(email: str) -> dict | None:
-    """Return single account dict if exists, else None."""
-    return read_accounts().get(email)
+def get_submission(email: str) -> dict | None:
+    """
+    Return single submission dict if exists, else None.
+    """
+    return read_submissions().get(email)
 
 
-def list_accounts() -> list[dict]:
-    """Return all accounts as list of {name, email}."""
-    return list(read_accounts().values())
+def list_submissions() -> list[dict]:
+    """Return all submissions as list of {name, email}."""
+    return list(read_submissions().values())
 
 
 def is_valid_email(email: str) -> bool:
@@ -90,7 +94,7 @@ def is_valid_name(name: str) -> bool:
 def register(name: str, email: str) -> str:
     """
     Create.
-    Register a new account. Stores in local JSON file. Returns email on success.
+    Register a new submission. Stores in local JSON file. Returns email on success.
     Raises ValueError for invalid input or if email already registered.
     """
     if not is_valid_name(name):
@@ -99,12 +103,12 @@ def register(name: str, email: str) -> str:
     if not is_valid_email(email):
         raise ValueError(f"Email does not follow correct format {email}")
 
-    accounts = read_accounts()
-    if email in accounts:
+    submissions = read_submissions()
+    if submission_exists(email):
         raise ValueError(f"Email already registered: {email}")
 
-    accounts[email] = {NAME: name, EMAIL: email}
-    save_accounts(accounts)
+    submissions[email] = {NAME: name, EMAIL: email}
+    save_submissions(submissions)
     return email 
     
     

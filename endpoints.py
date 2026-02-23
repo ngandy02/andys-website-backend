@@ -3,9 +3,9 @@ from flask_restx import Resource, Api
 from flask_cors import CORS
 
 import werkzeug.exceptions as wz
-import data.accounts as acc
+import data.submission as sub
 
-REGISTER_EP = "/register"
+SUBMIT_EP = "/submit"
 
 app = Flask(__name__)
 CORS(app)
@@ -16,22 +16,21 @@ api = Api(app)
 def home():
     return "Hello World"
 
-@api.route(REGISTER_EP)
+
+@api.route(SUBMIT_EP)
 class Register(Resource):
     def put(self):
         if not request.json:
             raise wz.BadRequest("JSON body required")
-        name = request.json.get(acc.NAME)
-        email = request.json.get(acc.EMAIL)
+        name = request.json.get(sub.NAME)
+        email = request.json.get(sub.EMAIL)
         if not email or not name:
             raise wz.BadRequest("Both name and email are required")
         try:
-            acc.register(name, email)
+            sub.register(name, email)
         except ValueError as e:
             raise wz.BadRequest(f'{str(e)}')
         return {"email": email}
-
-
 
 
 if __name__ == "__main__":
