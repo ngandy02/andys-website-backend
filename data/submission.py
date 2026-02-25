@@ -59,9 +59,9 @@ def submission_exists(email: str) -> bool:
     return False
 
 
-def get_submission(email: str) -> dict | None:
+def get_submission(email: str) -> dict | list | None:
     """
-    Return single submission dict if exists, else None.
+    Return single submission dict or list if exists, else None.
     """
     return read_submissions().get(email)
 
@@ -117,10 +117,17 @@ def submit(name: str, email: str, feedback: str) -> str:
         raise ValueError("Feeback is not a string")
 
     submissions = read_submissions()
-    # if submission_exists(email):
-    #     raise ValueError(f"Email already registered: {email}")
 
-    submissions[email] = {NAME: name, EMAIL: email, FEEDBACK: feedback}
+    if submission_exists(email): #if email already exists add submission under that email
+        if not isinstance(submissions[email], list):
+            first_submission = submissions[email]
+            submissions[email] = []
+            submissions[email].append(first_submission)
+        submissions[email].append({NAME: name, EMAIL: email, FEEDBACK: feedback})
+    else:
+        #if not then create new entry for the new email
+        submissions[email] = {NAME: name, EMAIL: email, FEEDBACK: feedback}
+
     save_submissions(submissions)
     return email 
     

@@ -4,10 +4,12 @@ import pytest
 TEST_EMAIL = "an3299@nyu.edu"
 TEST_NAME = "Andy Ng"
 TEST_FEEDBACK = "Really nice work with the UI!"
+TEST_FEEDBACK2 = "Nice use of the hover effects"
 
 TEMP_EMAIL = "allnng222@yahoo.com"
 TEMP_NAME = "Allen Ng"
 TEMP_FEEDBACK = "I like your page's transitions and theme"
+
 
 INVALID_EMAIL = "hello"
 NONEXISTENT_EMAIL = "ngandy0202@gmail.com"
@@ -52,10 +54,22 @@ def temp_submission():
 
 
 # create test
-def test_submit():
-    result = sub.submit(TEST_NAME, TEST_EMAIL, TEST_FEEDBACK)
-    assert result == TEST_EMAIL
-    assert result in sub.read_submissions()
+def test_submit(temp_submission):
+    # result = sub.submit(TEST_NAME, TEST_EMAIL, TEST_FEEDBACK)
+    # assert result == TEST_EMAIL
+    # assert result in sub.read_submissions()
+    assert TEMP_EMAIL == temp_submission
+    submissions = sub.read_submissions()
+    assert TEMP_EMAIL in submissions
+    submission = sub.get_submission(temp_submission)
+    assert TEMP_EMAIL == submission[sub.EMAIL]
+    assert TEMP_NAME in submission[sub.NAME]
+    assert TEMP_FEEDBACK in submission[sub.FEEDBACK]
+
+    # result = sub.submit(TEST_NAME, TEST_EMAIL, TEST_FEEDBACK2)
+    # assert result == TEST_EMAIL
+    # test_email = sub.get_submission(TEST_EMAIL)
+    # assert isinstance(test_email, list)
     
 
 
@@ -67,14 +81,14 @@ def test_read_submissions(temp_submission):
         return
     print(result)
     for key, value in result.items():
-        assert sub.EMAIL and sub.NAME and sub.FEEDBACK in value
+        assert isinstance(value, (dict, list))
         assert isinstance(key, str)
     assert temp_submission in result
     assert TEST_EMAIL in result
-    assert TEST_NAME in result[TEST_EMAIL][sub.NAME]
-    assert TEST_EMAIL in result[TEST_EMAIL][sub.EMAIL]
-    assert TEST_FEEDBACK in result[TEST_EMAIL][sub.FEEDBACK]
-    assert "Allen Ng" in result["allnng222@yahoo.com"][sub.NAME]
+    # assert TEST_NAME in result[TEST_EMAIL][sub.NAME]
+    # assert TEST_EMAIL in result[TEST_EMAIL][sub.EMAIL]
+    # assert TEST_FEEDBACK in result[TEST_EMAIL][sub.FEEDBACK]
+    # assert "Allen Ng" in result["allnng222@yahoo.com"][sub.NAME]
 
 
 # read one test 

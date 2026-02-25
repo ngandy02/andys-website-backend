@@ -1,7 +1,61 @@
 {
-  "an3299@nyu.edu": {
-    "name": "Andy Ng",
-    "email": "an3299@nyu.edu",
-    "feedback": "Really nice work with the UI!"
-  }
+  "an3299@nyu.edu": [
+    {
+      "name": "Andy Ng",
+      "email": "an3299@nyu.edu",
+      "feedback": "Really"
+    },
+    {
+      "name": "Andy Ng",
+      "email": "an3299@nyu.edu",
+      "feedback": "Nice use of the hover effects"
+    },
+    {
+      "name": "Andy Ng",
+      "email": "an3299@nyu.edu",
+      "feedback": "Nice use of the hover effects"
+    }
+  ],
+  "Paulliu123@gmail.com": [
+    {
+      "name": "Paul Liu",
+      "email": "Paulliu123@gmail.com",
+      "feedback": "Nice smooth transitions on the UI. It would also be nice to see your research proposals come to life"
+    },
+    {
+      "name": "Paul Liu",
+      "email": "Paulliu123@gmail.com",
+      "feedback": "Nice smooth transitions on the UI. It would also be nice to see your research proposals come to life"
+    },
+    {
+      "name": "Paul Liu",
+      "email": "Paulliu123@gmail.com",
+      "feedback": "Nice smooth transitions on the UI. It would also be nice to see your research proposals come to life"
+    },
+    {
+      "name": "Paul Liu",
+      "email": "Paulliu123@gmail.com",
+      "feedback": "Nice smooth transitions on the UI. It would also be nice to see your research proposals come to life"
+    },
+    {
+      "name": "Paul Liu",
+      "email": "Paulliu123@gmail.com",
+      "feedback": "Nice smooth transitions on the UI. It would also be nice to see your research proposals come to life"
+    },
+    {
+      "name": "Paul Liu",
+      "email": "Paulliu123@gmail.com",
+      "feedback": "Nice smooth transitions on the UI. It would also be nice to see your research proposals come to life"
+    },
+    {
+      "name": "Paul Liu",
+      "email": "Paulliu123@gmail.com",
+      "feedback": "Nice smooth transitions on the UI. It would also be nice to see your research proposals come to life"
+    },
+    {
+      "name": "Paul Liu",
+      "email": "Paulliu123@gmail.com",
+      "feedback": "Nice smooth transitions on the UI. It would also be nice to see your research proposals come to life"
+    }
+  ]
 }
